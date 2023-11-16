@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33213.308
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Laba5_Algo", "Laba5_Algo\Laba5_Algo.csproj", "{FD2DAB81-8CCA-4987-876B-D0DC415D09BB}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6FFA9D88-0A96-4C84-8AA9-F6676B381F19} = {6FFA9D88-0A96-4C84-8AA9-F6676B381F19}
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Graph.Core", "Graph.Core\Graph.Core.csproj", "{6FFA9D88-0A96-4C84-8AA9-F6676B381F19}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FD2DAB81-8CCA-4987-876B-D0DC415D09BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD2DAB81-8CCA-4987-876B-D0DC415D09BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD2DAB81-8CCA-4987-876B-D0DC415D09BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD2DAB81-8CCA-4987-876B-D0DC415D09BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6FFA9D88-0A96-4C84-8AA9-F6676B381F19}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FFA9D88-0A96-4C84-8AA9-F6676B381F19}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FFA9D88-0A96-4C84-8AA9-F6676B381F19}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FFA9D88-0A96-4C84-8AA9-F6676B381F19}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D9301267-EEE5-4E57-B6F2-A6CD587A17D0}
+	EndGlobalSection
+EndGlobal
