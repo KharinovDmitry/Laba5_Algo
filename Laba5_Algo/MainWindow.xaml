@@ -27,8 +27,29 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Canvas>
-                            <Line X1="{Binding X1}" Y1="{Binding Y1}" X2="{Binding X2}" Y2="{Binding Y2}" Stroke="Black" StrokeThickness="2"/>
-                            <Path Visibility="{Binding IsOriented}" Stroke="Black" StrokeThickness="2" Fill="Black" Data="{Binding ArrowGeometry}"/>
+                            <Line X1="{Binding X1}" Y1="{Binding Y1}" X2="{Binding X2}" Y2="{Binding Y2}" Stroke="Black" StrokeThickness="2">
+                                <Line.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem    
+                                        Command="{Binding Source={StaticResource Proxy}, Path=Data.ConnectVertex}"
+                                        Click="RemoveEdge_Click"
+                                        Header="Удалить ребро">
+                                            <MenuItem.Tag >
+                                                <Binding Path="PlacementTarget.DataContext" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}" />
+                                            </MenuItem.Tag>
+                                        </MenuItem>
+                                        <MenuItem 
+                                        Command="{Binding Source={StaticResource Proxy}, Path=Data.RemoveVertex}"
+                                        Click="EditEdge_Click"
+                                        Header="Изменить ребро">
+                                            <MenuItem.Tag>
+                                                <Binding Path="PlacementTarget.DataContext" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}" />
+                                            </MenuItem.Tag>
+                                        </MenuItem>
+                                    </ContextMenu>
+                                </Line.ContextMenu>
+                            </Line>
+                                <Path Visibility="{Binding IsOriented }" Stroke="Black" StrokeThickness="2" Fill="Black" Data="{Binding ArrowGeometry}"/>
                         </Canvas>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>

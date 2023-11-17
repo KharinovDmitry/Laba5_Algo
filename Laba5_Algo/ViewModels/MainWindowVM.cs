@@ -240,7 +240,7 @@ namespace Laba5_Algo.ViewModels
             var edge = (sender as MenuItem).Tag as EdgeVM;
 
             int weight = new EditEdgeVM(edge.Weight).ShowDialog();
-            edge.Weight = weight == -1 ? weight : edge.Weight;
+            edge.Weight = weight == -1 ? edge.Weight : weight;
         }
 
         public void RemoveVertex(object sender, RoutedEventArgs e)
