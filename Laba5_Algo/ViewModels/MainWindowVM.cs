@@ -40,11 +40,6 @@ namespace Laba5_Algo.ViewModels
 
         public MainWindowVM()
         {
-            isDragging = false;
-            IsConnecting = false;
-            IsOriented = false;
-            Visible = Visibility.Collapsed;
-
             SearchAlgorithms = new ObservableCollection<IGraphSearch>()
             {
                 new BFS(),
@@ -62,6 +57,12 @@ namespace Laba5_Algo.ViewModels
             StartSearchAlgo = new RelayCommandAsync(startSearchAlgo);
 
             openFileDialog = new FileDialogService();
+
+            isDragging = false;
+            IsConnecting = false;
+            IsOriented = false;
+            Visible = Visibility.Collapsed;
+
         }
 
         private bool isDragging;
@@ -120,7 +121,8 @@ namespace Laba5_Algo.ViewModels
         public bool IsOriented
         {
             get { return isOriented; }
-            set { 
+            set {
+                clear(null);
                 isOriented = value; 
                 OnPropertyChanged(nameof(IsOriented));
             }
@@ -331,6 +333,7 @@ namespace Laba5_Algo.ViewModels
 
             return (dx * dx) / (radius * radius) + (dy * dy) / (radius * radius) <= 1;
         }
+
 
         private async Task startSearchAlgo()
         {
