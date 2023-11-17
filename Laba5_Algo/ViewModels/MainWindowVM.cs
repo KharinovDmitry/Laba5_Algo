@@ -32,6 +32,7 @@ namespace Laba5_Algo.ViewModels
             isDragging = false;
             IsConnecting = false;
             Visible = Visibility.Collapsed;
+            ArrowVisible = Visibility.Collapsed;
 
             VertexRadius = 30;
             Vertices = new ObservableCollection<VertexVM>();
@@ -95,6 +96,17 @@ namespace Laba5_Algo.ViewModels
             }
         }
 
+        private bool isOriented;
+        public bool IsOriented
+        {
+            get { return isOriented; }
+            set { 
+                isOriented = value; 
+                OnPropertyChanged(nameof(IsOriented));
+                ArrowVisible = IsOriented ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
+
         private bool isConnecting;
         public bool IsConnecting
         {
@@ -115,6 +127,17 @@ namespace Laba5_Algo.ViewModels
             {
                 visible = value;
                 OnPropertyChanged(nameof(Visible));
+            }
+        }
+
+        private Visibility arrowVisible;
+        public Visibility ArrowVisible
+        {
+            get { return arrowVisible; }
+            set
+            {
+                arrowVisible = value;
+                OnPropertyChanged(nameof(ArrowVisible));
             }
         }
 
@@ -181,7 +204,7 @@ namespace Laba5_Algo.ViewModels
         public void MouseMove(object sender, MouseEventArgs e)
         {
             Point p = e.GetPosition((UIElement)sender);
-            MousePointX = (int)p.X - 100 - 15;
+            MousePointX = (int)p.X - 15;
             MousePointY = (int)p.Y - 15;
 
             if(isDragging && p.X > VertexRadius / 2 && selectedVertex != null)
@@ -198,7 +221,7 @@ namespace Laba5_Algo.ViewModels
         public void CanvasClick(object sender, MouseButtonEventArgs e)
         {
             Point p = e.GetPosition((UIElement)sender);
-            p.X -= 100;
+            //p.X -= 100;
             Point newVertexPoint = new Point(p.X - VertexRadius / 2, p.Y - VertexRadius / 2);
 
             if (GetVertexFromPoint(newVertexPoint) != null)
@@ -233,6 +256,9 @@ namespace Laba5_Algo.ViewModels
         public void ConnectVertex(object sender, RoutedEventArgs e)
         {
             var vertex = (sender as MenuItem).Tag as VertexVM;
+            if(vertex == null) 
+                throw new NullReferenceException(nameof(vertex));
+
             SelectedVertex = vertex;
             IsConnecting = true;
         }
@@ -246,7 +272,7 @@ namespace Laba5_Algo.ViewModels
                 int weight = new EditEdgeVM().ShowDialog();
                 if (weight != -1)
                 {
-                    Edges.Add(new EdgeVM(vertex, SelectedVertex, VertexRadius, weight));
+                    Edges.Add(new EdgeVM(SelectedVertex, vertex, VertexRadius, weight, IsOriented));
                 }
 
                 IsConnecting = false;

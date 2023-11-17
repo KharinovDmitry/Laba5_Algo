@@ -21,6 +21,12 @@ namespace Graph.Core
         {
             return Nodes.Add(new Node(Name));
         }
+
+        public int[][] GetAdjacencyMatrix()
+        {
+            //TODO
+            throw new NotImplementedException();
+        }
         
     }
 }

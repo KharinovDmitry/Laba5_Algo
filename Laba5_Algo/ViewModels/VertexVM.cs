@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Laba5_Algo.ViewModels
 {
@@ -24,6 +25,7 @@ namespace Laba5_Algo.ViewModels
             {
                 x = value;
                 OnPropertyChanged(nameof(X));
+                XName = X + 11 - 4 * (Name.Length - 1);
             }
         }
         private int y;
@@ -34,6 +36,7 @@ namespace Laba5_Algo.ViewModels
             {
                 y = value;
                 OnPropertyChanged(nameof(Y));
+                YName = Y + 7; 
             }
         }
 
@@ -46,6 +49,20 @@ namespace Laba5_Algo.ViewModels
                 name = value;
                 OnPropertyChanged(nameof(Name));
             }
+        }
+
+        private int xName;
+        public int XName
+        {
+            get { return xName; }
+            set { xName = value; OnPropertyChanged(nameof(XName)); }
+        }
+
+        private int yName;
+        public int YName
+        {
+            get { return yName; }
+            set { yName = value; OnPropertyChanged(nameof(YName));}
         }
 
         public VertexVM(int x, int y, string name)
