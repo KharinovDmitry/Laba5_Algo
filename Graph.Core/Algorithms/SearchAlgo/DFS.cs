@@ -8,9 +8,18 @@ namespace Graph.Core.Algorithms.SearchAlgo
 {
     public class DFS : IGraphSearch
     {
-        public List<Node> Traversal(Graph graph)
+        public List<Vertex> Traversal(Graph graph)
         {
-            throw new NotImplementedException();
+            var visited = new List<Vertex>();
+
+            var startVertex = graph.Vertices[0];
+
+
+
+
+            return visited;
         }
+
+        public override string ToString() => "DFS";
     }
 }

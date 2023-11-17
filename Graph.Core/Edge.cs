@@ -10,12 +10,12 @@ namespace Graph.Core
     {
         public int Weight { get; set; }
 
-        public Node AdjacentNode { get; set; }
+        public Vertex DestNode { get; set; }
 
-        public Edge(int weight, Node node) 
+        public Edge(Vertex to, int weight) 
         {
+            DestNode = to;
             Weight = weight;
-            AdjacentNode = node;
         }
     }
 }

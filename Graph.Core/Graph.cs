@@ -8,18 +8,24 @@ namespace Graph.Core
 {
     public class Graph
     {
-        public HashSet<Node> Nodes { get; set; }
+        public List<Vertex> Vertices { get; set; }
+
         public bool IsOriented;
 
 
-        public Graph() 
+        public Graph(bool isOriented) 
         { 
-            Nodes = new HashSet<Node>();
+            IsOriented = isOriented;
+            Vertices = new List<Vertex>();
         }
 
-        public bool AddNode(string Name)
+        public void AddVertex(string Name)
         {
-            return Nodes.Add(new Node(Name));
+            Vertices.Add(new Vertex(Name));
+        }
+        public void AddVertex(Vertex vertex)
+        {
+            Vertices.Add(vertex);
         }
 
         public int[][] GetAdjacencyMatrix()

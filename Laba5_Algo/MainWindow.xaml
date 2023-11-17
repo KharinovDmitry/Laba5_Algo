@@ -74,7 +74,7 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Canvas>
-                            <Ellipse Width="30" Height="30" Fill="Aqua"
+                            <Ellipse Width="30" Height="30" Fill="{Binding Colour}"
                                  MouseLeftButtonUp="Ellipse_MouseLeftButtonUp">
                                 <Ellipse.RenderTransform>
                                     <TranslateTransform X="{Binding X}" Y="{Binding Y}" />
@@ -132,6 +132,15 @@
                 </Style>
             </Button.Resources>
         </Button>
-        <CheckBox Name="OrientedCB" Content="Ориентировнный" IsChecked="{Binding IsOriented}" HorizontalAlignment="Left" Margin="10,85,0,0" VerticalAlignment="Top" Width="135"/>
+        <CheckBox Name="OrientedCB" Content="Ориентировнный" IsChecked="{Binding IsOriented}" HorizontalAlignment="Left" Margin="7,85,0,0" VerticalAlignment="Top" Width="135"/>
+        <TextBlock Text="Обход графа" HorizontalAlignment="Left" Margin="7,110,0,0" VerticalAlignment="Top" Width="135"/>
+        <ComboBox ItemsSource="{Binding SearchAlgorithms}" SelectedItem="{Binding SelectedSearchAlgo}" HorizontalAlignment="Left" Margin="7,135,0,0" VerticalAlignment="Top" Width="135"/>
+        <Button Background="AliceBlue" Command="{Binding StartSearchAlgo}" Content="Обойти граф" HorizontalAlignment="Left" Margin="7,170,0,0" VerticalAlignment="Top" Width="135">
+            <Button.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </Button.Resources>
+        </Button>
     </Grid>
 </Window>

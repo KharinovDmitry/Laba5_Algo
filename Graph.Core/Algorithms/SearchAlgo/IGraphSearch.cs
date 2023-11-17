@@ -8,6 +8,6 @@ namespace Graph.Core.Algorithms.SearchAlgo
 {
     public interface IGraphSearch
     {
-        public List<Node> Traversal(Graph graph);
+        public List<Vertex> Traversal(Graph graph);
     }
 }

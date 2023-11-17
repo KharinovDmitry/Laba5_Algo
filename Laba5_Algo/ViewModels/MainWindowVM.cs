@@ -1,6 +1,8 @@
 ﻿using Graph.Core;
+using Graph.Core.Algorithms.SearchAlgo;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -27,12 +29,28 @@ namespace Laba5_Algo.ViewModels
 
         private FileDialogService openFileDialog;
 
+        public ObservableCollection<IGraphSearch> SearchAlgorithms { get; }
+
+        private IGraphSearch selectedSearchAlgo;
+        public IGraphSearch SelectedSearchAlgo
+        {
+            get { return selectedSearchAlgo; }
+            set { selectedSearchAlgo = value; OnPropertyChanged(nameof(SelectedSearchAlgo)); }
+        }
+
         public MainWindowVM()
         {
             isDragging = false;
             IsConnecting = false;
             IsOriented = false;
             Visible = Visibility.Collapsed;
+
+            SearchAlgorithms = new ObservableCollection<IGraphSearch>()
+            {
+                new BFS(),
+                new DFS()
+            };
+            SelectedSearchAlgo = SearchAlgorithms[0];
 
             VertexRadius = 30;
             Vertices = new ObservableCollection<VertexVM>();
@@ -41,6 +59,7 @@ namespace Laba5_Algo.ViewModels
             Clear = new RelayCommand(clear);
             Save = new RelayCommand(save);
             Load = new RelayCommand(load);
+            StartSearchAlgo = new RelayCommandAsync(startSearchAlgo);
 
             openFileDialog = new FileDialogService();
         }
@@ -62,6 +81,7 @@ namespace Laba5_Algo.ViewModels
         public ICommand Clear { get; set; }
         public ICommand Save { get; set; }
         public ICommand Load { get; set; }
+        public ICommand StartSearchAlgo { get; set; }
 
         private ObservableCollection<VertexVM> vertices;
         public ObservableCollection<VertexVM> Vertices
@@ -254,6 +274,9 @@ namespace Laba5_Algo.ViewModels
         {
             Point clickedPoint = e.GetPosition((UIElement)sender);
             var vertex = GetVertexFromPoint(clickedPoint);
+            if (vertex == null)
+                return;
+
             if (IsConnecting)
             {
                 int weight = new EditEdgeVM().ShowDialog();
@@ -307,6 +330,24 @@ namespace Laba5_Algo.ViewModels
             double dy = point.Y - vertex.Y;
 
             return (dx * dx) / (radius * radius) + (dy * dy) / (radius * radius) <= 1;
+        }
+
+        private async Task startSearchAlgo()
+        {
+            var graph = GraphVMConverter.ToModel(Vertices.ToList(), Edges.ToList(), IsOriented);
+            var nodes = SelectedSearchAlgo.Traversal(graph);
+
+            foreach (var node in nodes)
+            {
+                Vertices.Where(n => n.Name == node.Name).First().SetYellow();
+                await Task.Delay(500);
+            }
+            MessageBox.Show("Выполнено");
+
+            foreach(var vertex in Vertices)
+            {
+                vertex.SetDefaultColor();
+            }
         }
     }
 }
