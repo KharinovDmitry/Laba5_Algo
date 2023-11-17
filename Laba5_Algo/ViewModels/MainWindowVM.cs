@@ -31,8 +31,8 @@ namespace Laba5_Algo.ViewModels
         {
             isDragging = false;
             IsConnecting = false;
+            IsOriented = false;
             Visible = Visibility.Collapsed;
-            ArrowVisible = Visibility.Collapsed;
 
             VertexRadius = 30;
             Vertices = new ObservableCollection<VertexVM>();
@@ -103,7 +103,6 @@ namespace Laba5_Algo.ViewModels
             set { 
                 isOriented = value; 
                 OnPropertyChanged(nameof(IsOriented));
-                ArrowVisible = IsOriented ? Visibility.Visible : Visibility.Collapsed;
             }
         }
 
@@ -127,17 +126,6 @@ namespace Laba5_Algo.ViewModels
             {
                 visible = value;
                 OnPropertyChanged(nameof(Visible));
-            }
-        }
-
-        private Visibility arrowVisible;
-        public Visibility ArrowVisible
-        {
-            get { return arrowVisible; }
-            set
-            {
-                arrowVisible = value;
-                OnPropertyChanged(nameof(ArrowVisible));
             }
         }
 
@@ -221,7 +209,6 @@ namespace Laba5_Algo.ViewModels
         public void CanvasClick(object sender, MouseButtonEventArgs e)
         {
             Point p = e.GetPosition((UIElement)sender);
-            //p.X -= 100;
             Point newVertexPoint = new Point(p.X - VertexRadius / 2, p.Y - VertexRadius / 2);
 
             if (GetVertexFromPoint(newVertexPoint) != null)

@@ -49,7 +49,12 @@
                                     </ContextMenu>
                                 </Line.ContextMenu>
                             </Line>
-                                <Path Visibility="{Binding IsOriented }" Stroke="Black" StrokeThickness="2" Fill="Black" Data="{Binding ArrowGeometry}"/>
+                            <Path Visibility="{Binding IsOriented }" Stroke="Black" StrokeThickness="2" Fill="Black" Data="{Binding ArrowGeometry}"/>
+                            <TextBlock Text="{Binding Weight}">
+                                <TextBlock.RenderTransform>
+                                    <TranslateTransform X="{Binding XText}" Y="{Binding YText}"/>
+                                </TextBlock.RenderTransform>
+                            </TextBlock>
                         </Canvas>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>

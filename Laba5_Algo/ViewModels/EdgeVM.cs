@@ -24,6 +24,7 @@ namespace Laba5_Algo.ViewModels
         {
             get { return isOriented ? Visibility.Visible : Visibility.Collapsed; }
         }
+
         private int vertexRadius;
 
         private VertexVM from;
@@ -35,6 +36,7 @@ namespace Laba5_Algo.ViewModels
                 OnPropertyChanged(nameof(From));
             }
         }
+
         private VertexVM to;
         public VertexVM To
         {
@@ -119,6 +121,25 @@ namespace Laba5_Algo.ViewModels
         {
             get { return weight; }
             set { weight = value; OnPropertyChanged(nameof(Weight)); }
+        }
+
+        public int XText
+        {
+            get { return (int)GetTextPoint().X; }
+            set { OnPropertyChanged(nameof(XText)); }
+        }
+
+        public int YText
+        {
+            get { return (int)GetTextPoint().Y; }
+            set { OnPropertyChanged(nameof(YText)); }
+        }
+
+        public Point GetTextPoint()
+        {
+            int x = (X1 + X2) / 2;
+            int y = (Y1 + Y2) / 2 - 20;
+            return new Point(x, y);
         }
 
         public EdgeVM(VertexVM from, VertexVM to, int vertexRadius, int weight, bool isOriented)
