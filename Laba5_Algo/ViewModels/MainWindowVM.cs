@@ -193,6 +193,7 @@ namespace Laba5_Algo.ViewModels
             {
                 var res = GraphFileConverter.Load(path);
 
+                IsOriented = res.Item3;
                 Vertices = new ObservableCollection<VertexVM>(res.Item1);
                 Edges = new ObservableCollection<EdgeVM>(res.Item2);
             } 
@@ -208,7 +209,7 @@ namespace Laba5_Algo.ViewModels
                 return;
 
             string path = openFileDialog.FilePath;
-            GraphFileConverter.Save(Vertices.ToList(), Edges.ToList(), path);
+            GraphFileConverter.Save(Vertices.ToList(), Edges.ToList(), IsOriented, path);
         }
 
         public void MouseMove(object sender, MouseEventArgs e)
@@ -342,7 +343,7 @@ namespace Laba5_Algo.ViewModels
 
             foreach (var node in nodes)
             {
-                Vertices.Where(n => n.Name == node.Name).First().SetYellow();
+                Vertices.Where(n => n.Name == node.Name).First().SetGreen();
                 await Task.Delay(500);
             }
             MessageBox.Show("Выполнено");

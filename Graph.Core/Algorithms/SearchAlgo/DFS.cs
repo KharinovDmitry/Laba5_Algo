@@ -11,6 +11,8 @@ namespace Graph.Core.Algorithms.SearchAlgo
         private List<Vertex> visited = new List<Vertex>();
         public List<Vertex> Traversal(Graph graph)
         {
+            visited.Clear();
+
             dfs(graph.Vertices[0]);
             return visited;
         }

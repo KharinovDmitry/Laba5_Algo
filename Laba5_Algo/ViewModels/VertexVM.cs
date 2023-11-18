@@ -93,5 +93,10 @@ namespace Laba5_Algo.ViewModels
         {
             Colour = new SolidColorBrush(Color.FromRgb(255, 255, 0));
         }
+
+        public void SetGreen()
+        {
+            Colour = new SolidColorBrush(Color.FromRgb(0, 255, 0));
+        }
     }
 }
