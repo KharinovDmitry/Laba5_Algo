@@ -55,6 +55,9 @@ namespace Laba5_Algo.ViewModels
             Save = new RelayCommand(save);
             Load = new RelayCommand(load);
             StartSearchAlgo = new RelayCommandAsync(startSearchAlgo);
+            StartMaxFlowAlgo = new RelayCommandAsync(startMaxFlowAlgo);
+            StartMinTreeAlgo = new RelayCommandAsync(startMinTreeAlgo);
+            StartMinPathAlgo = new RelayCommandAsync(startMinPath);
 
             openFileDialog = new FileDialogService();
 
@@ -83,6 +86,9 @@ namespace Laba5_Algo.ViewModels
         public ICommand Save { get; set; }
         public ICommand Load { get; set; }
         public ICommand StartSearchAlgo { get; set; }
+        public ICommand StartMaxFlowAlgo { get; set; }
+        public ICommand StartMinPathAlgo { get; set; }
+        public ICommand StartMinTreeAlgo { get; set; }
 
         private ObservableCollection<VertexVM> vertices;
         public ObservableCollection<VertexVM> Vertices
@@ -114,6 +120,28 @@ namespace Laba5_Algo.ViewModels
             {
                 selectedVertex = value;
                 OnPropertyChanged(nameof(SelectedVertex));
+            }
+        }
+
+        private VertexVM fromVertex;
+        public VertexVM FromVertex
+        {
+            get { return fromVertex; }
+            set
+            {
+                fromVertex = value;
+                OnPropertyChanged(nameof(FromVertex));
+            }
+        }
+
+        private VertexVM toVertex;
+        public VertexVM ToVertex
+        {
+            get { return toVertex; }
+            set
+            {
+                toVertex = value;
+                OnPropertyChanged(nameof(ToVertex));
             }
         }
 
@@ -352,6 +380,21 @@ namespace Laba5_Algo.ViewModels
             {
                 vertex.SetDefaultColor();
             }
+        }
+
+        private async Task startMinPath()
+        {
+            throw new NotImplementedException();
+        }
+
+        private async Task startMinTreeAlgo()
+        {
+            throw new NotImplementedException();
+        }
+
+        private async Task startMaxFlowAlgo()
+        {
+            throw new NotImplementedException();
         }
     }
 }
