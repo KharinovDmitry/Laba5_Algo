@@ -27,7 +27,7 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Canvas>
-                            <Path Visibility="{Binding IsOriented }" Stroke="Black" StrokeThickness="2" Fill="Black" Data="{Binding ArrowGeometry}"/>
+                            <Path Visibility="{Binding IsOriented}" Stroke="Black" StrokeThickness="2" Fill="Black" Data="{Binding ArrowGeometry}"/>
                             <Line X1="{Binding X1}" Y1="{Binding Y1}" X2="{Binding X2}" Y2="{Binding Y2}" Stroke="Black" StrokeThickness="2">
                                 <Line.ContextMenu>
                                     <ContextMenu>
@@ -50,7 +50,7 @@
                                     </ContextMenu>
                                 </Line.ContextMenu>
                             </Line>
-                            <TextBlock Text="{Binding Weight}">
+                            <TextBlock Text="{Binding Text}">
                                 <TextBlock.RenderTransform>
                                     <TranslateTransform X="{Binding XText}" Y="{Binding YText}"/>
                                 </TextBlock.RenderTransform>
@@ -62,7 +62,6 @@
             <ItemsControl Name="Vertices" ItemsSource="{Binding Vertices}" 
                           MouseLeftButtonDown="Vertex_MouseLeftButtonDown" 
                           Margin="0,0,0,0">
-
                 <ItemsControl.Resources>
                     <local:BindingProxy x:Key="Proxy" Data="{Binding}" />
                 </ItemsControl.Resources>

@@ -363,7 +363,6 @@ namespace Laba5_Algo.ViewModels
             return (dx * dx) / (radius * radius) + (dy * dy) / (radius * radius) <= 1;
         }
 
-
         private async Task startSearchAlgo()
         {
             var graph = GraphVMConverter.ToModel(Vertices.ToList(), Edges.ToList(), IsOriented);

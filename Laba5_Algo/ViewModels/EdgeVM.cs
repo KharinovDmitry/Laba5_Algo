@@ -135,6 +135,13 @@ namespace Laba5_Algo.ViewModels
             set { OnPropertyChanged(nameof(YText)); }
         }
 
+        public string text;
+        public string Text
+        {
+            get { return text; }
+            set { text = value; OnPropertyChanged(nameof(Text)); }
+        }
+
         public Point GetTextPoint()
         {
             int x = (X1 + X2) / 2;
@@ -149,6 +156,13 @@ namespace Laba5_Algo.ViewModels
             Weight = weight;
             From = from;
             To = to;
+
+            Text = weight.ToString();
+        }
+
+        public void SetDefaultText()
+        {
+            Text = weight.ToString();
         }
     }
 }
