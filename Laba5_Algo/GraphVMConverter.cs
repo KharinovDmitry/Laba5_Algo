@@ -21,6 +21,7 @@ namespace Laba5_Algo
                 var vertexFrom = res.Vertices.Where(x => x.Name == edge.From.Name).First();
                 var vertexTo = res.Vertices.Where(x => x.Name == edge.To.Name).First();
                 vertexFrom.AddEdge(vertexTo, edge.Weight);
+                vertexTo.AddEdge(vertexFrom, edge.Weight);
             }
 
 
