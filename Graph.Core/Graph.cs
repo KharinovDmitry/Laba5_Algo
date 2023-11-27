@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Graph.Core
 {
@@ -18,6 +19,7 @@ namespace Graph.Core
             IsOriented = isOriented;
             Vertices = new List<Vertex>();
         }
+  
 
         public void AddVertex(string Name)
         {
@@ -26,6 +28,14 @@ namespace Graph.Core
         public void AddVertex(Vertex vertex)
         {
             Vertices.Add(vertex);
+        }
+        public void CompareByWeight() 
+        {
+
+        }
+        public void Sort()
+        {
+            Vertices.Sort();
         }
 
         public int[][] GetAdjacencyMatrix()

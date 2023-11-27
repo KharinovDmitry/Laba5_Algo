@@ -28,7 +28,7 @@
                     <DataTemplate>
                         <Canvas>
                             <Path Visibility="{Binding IsOriented}" Stroke="Black" StrokeThickness="2" Fill="Black" Data="{Binding ArrowGeometry}"/>
-                            <Line X1="{Binding X1}" Y1="{Binding Y1}" X2="{Binding X2}" Y2="{Binding Y2}" Stroke="Black" StrokeThickness="2">
+                            <Line X1="{Binding X1}" Y1="{Binding Y1}" X2="{Binding X2}" Y2="{Binding Y2}" Stroke="{Binding Colour}" StrokeThickness="2">
                                 <Line.ContextMenu>
                                     <ContextMenu>
                                         <MenuItem    

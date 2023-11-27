@@ -31,8 +31,9 @@ namespace Laba5_Algo.ViewModels
         public VertexVM From
         {
             get { return from; }
-            set { 
-                from = value; 
+            set
+            {
+                from = value;
                 OnPropertyChanged(nameof(From));
             }
         }
@@ -41,17 +42,23 @@ namespace Laba5_Algo.ViewModels
         public VertexVM To
         {
             get { return to; }
-            set { 
-                to = value; 
+            set
+            {
+                to = value;
                 OnPropertyChanged(nameof(To));
             }
         }
-
+        private SolidColorBrush colour;
+        public SolidColorBrush Colour
+        {
+            get { return colour; }
+            set { colour = value; OnPropertyChanged(nameof(Colour)); }
+        }
         public int X1
-        { 
+        {
             get { return From.X + vertexRadius / 2; }
-            set 
-            { 
+            set
+            {
                 OnPropertyChanged(nameof(X1));
                 ArrowGeometry = GetArrowGeometry();
             }
@@ -75,10 +82,10 @@ namespace Laba5_Algo.ViewModels
             set { OnPropertyChanged(nameof(Y2)); ArrowGeometry = GetArrowGeometry(); }
         }
 
-        public Geometry ArrowGeometry 
-        { 
+        public Geometry ArrowGeometry
+        {
             get { return GetArrowGeometry(); }
-            set { OnPropertyChanged(nameof(ArrowGeometry));}
+            set { OnPropertyChanged(nameof(ArrowGeometry)); }
         }
 
         public Geometry GetArrowGeometry()
@@ -158,6 +165,7 @@ namespace Laba5_Algo.ViewModels
             To = to;
 
             Text = weight.ToString();
+            Colour = new SolidColorBrush(Colors.Black);
         }
 
         public void SetDefaultText()
