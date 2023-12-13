@@ -18,12 +18,22 @@ namespace Graph.Core
             Edges = new List<Edge>();
         }
 
-        public void AddEdge(Vertex dest, int weight) 
+        public Edge AddEdge(Vertex dest, int weight) 
         {
-            Edges.Add(new Edge(dest, weight));
+            var edge = new Edge(dest, weight);
+            edge.From = this;
+            edge.To = dest;
+            Edges.Add(edge);
+            return edge;
         }
 
-
+        public IEnumerable<Edge> IncidentEdges
+        {
+            get
+            {
+                foreach (var e in Edges) yield return e;
+            }
+        }
         public int CompareTo(Vertex? other)
         {
             return Name.CompareTo(other.Name);

@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Xml.Linq;
 
@@ -150,9 +151,10 @@ namespace Laba5_Algo.ViewModels
         public bool IsOriented
         {
             get { return isOriented; }
-            set {
+            set
+            {
                 clear(null);
-                isOriented = value; 
+                isOriented = value;
                 OnPropertyChanged(nameof(IsOriented));
             }
         }
@@ -213,8 +215,8 @@ namespace Laba5_Algo.ViewModels
         {
             Vertices.Clear();
             Edges.Clear();
-      
-            if(!openFileDialog.OpenFileDialog())
+
+            if (!openFileDialog.OpenFileDialog())
                 return;
 
             string path = openFileDialog.FilePath;
@@ -225,7 +227,7 @@ namespace Laba5_Algo.ViewModels
                 IsOriented = res.Item3;
                 Vertices = new ObservableCollection<VertexVM>(res.Item1);
                 Edges = new ObservableCollection<EdgeVM>(res.Item2);
-            } 
+            }
             catch
             {
                 MessageBox.Show("Неваллидный файл");
@@ -247,9 +249,9 @@ namespace Laba5_Algo.ViewModels
             MousePointX = (int)p.X - 15;
             MousePointY = (int)p.Y - 15;
 
-            if(isDragging && p.X > VertexRadius / 2 && selectedVertex != null)
+            if (isDragging && p.X > VertexRadius / 2 && selectedVertex != null)
             {
-                SelectedVertex.X = MousePointX; 
+                SelectedVertex.X = MousePointX;
                 SelectedVertex.Y = MousePointY;
 
                 var edgesToRemove = GetConnectedEdge(SelectedVertex);
@@ -295,7 +297,7 @@ namespace Laba5_Algo.ViewModels
         public void ConnectVertex(object sender, RoutedEventArgs e)
         {
             var vertex = (sender as MenuItem).Tag as VertexVM;
-            if(vertex == null) 
+            if (vertex == null)
                 throw new NullReferenceException(nameof(vertex));
 
             SelectedVertex = vertex;
@@ -376,7 +378,7 @@ namespace Laba5_Algo.ViewModels
             }
             MessageBox.Show("Выполнено");
 
-            foreach(var vertex in Vertices)
+            foreach (var vertex in Vertices)
             {
                 vertex.SetDefaultColor();
             }
@@ -384,12 +386,91 @@ namespace Laba5_Algo.ViewModels
 
         private async Task startMinPath()
         {
-            throw new NotImplementedException();
+            var graph = GraphVMConverter.ToModel(Vertices.ToList(), Edges.ToList(), IsOriented);
+             
+            ShortestPathAlgorithm algorithm = new();           
+            var vertexFrom = graph.Vertices.First(n => n.Name == FromVertex.Name);
+            var vertexTo = graph.Vertices.First(n => n.Name == ToVertex.Name);
+           
+            var (vertices, price) = algorithm.Execute(graph, vertexFrom, vertexTo);
+
+            foreach (var vertex in vertices)
+            {
+                var vmVertex = Vertices.Where(n => n.Name == vertex.Name).First();
+                vmVertex.Colour = new SolidColorBrush(Colors.Orange);
+                foreach (var edge in vertex.Edges)
+                {
+                    var currVertex = Vertices.Where(n => n.Name == edge.DestNode.Name).First();
+
+                    var oldColor = currVertex.Colour.Color;
+                    currVertex.Colour = new SolidColorBrush(Colors.LightGreen);
+                    await Task.Delay(500);
+                    currVertex.Colour = new SolidColorBrush(oldColor);
+                    await Task.Delay(500);
+                }
+            }
+            await Task.Delay(1000);
+            foreach (var vertex in Vertices)
+            {
+                vertex.SetDefaultColor();
+            }
+            MessageBox.Show(String.Format("Минимальный путь: {0}", price.ToString()));
         }
 
         private async Task startMinTreeAlgo()
         {
-            throw new NotImplementedException();
+            var graph = GraphVMConverter.ToModel(Vertices.ToList(), Edges.ToList(), IsOriented);
+
+            MinTreeAlgorithm algorithm = new();
+            var (vertices, edges) = algorithm.Execute(graph);
+            var prevVertex = Vertices.Where(n => n.Name == vertices[0].Name).First();
+            prevVertex.Colour = new SolidColorBrush(Colors.Orange);
+            var vmVertex = prevVertex;
+            int currEdgeIndex = 0;
+            foreach (var vertex in vertices)
+            {
+                vmVertex = Vertices.Where(n => n.Name == vertex.Name).First();
+                vmVertex.Colour = new SolidColorBrush(Colors.Orange);
+
+                foreach (var edge in vertex.Edges)
+                {
+                    var currVertex = Vertices.Where(n => n.Name == edge.DestNode.Name).First();
+
+                    var oldColor = currVertex.Colour.Color;
+                    currVertex.Colour = new SolidColorBrush(Colors.LightGreen);
+                    await Task.Delay(500);
+                    currVertex.Colour = new SolidColorBrush(oldColor);
+                    await Task.Delay(500);
+                }
+
+                var primEdge = edges[Math.Min(currEdgeIndex, edges.Count - 1)];
+                {
+                    var edgeVM = this.Edges.Where(edge => edge.From.Name == primEdge.From.Name && edge.To.Name == primEdge.To.Name).FirstOrDefault();
+                    if (edgeVM != null)
+                    {
+                        edgeVM.Colour = new SolidColorBrush(Colors.Red);
+                    }
+                    edgeVM = this.Edges.Where(edge => edge.To.Name == primEdge.From.Name && edge.From.Name == primEdge.To.Name).FirstOrDefault();
+                    if (edgeVM != null)
+                    {
+                        edgeVM.Colour = new SolidColorBrush(Colors.Red);
+                    }
+                    currEdgeIndex++;
+                }
+
+                prevVertex = vmVertex;
+                await Task.Delay(500);
+
+            }
+
+            foreach (var vertex in Vertices)
+            {
+                vertex.SetDefaultColor();
+            }
+            foreach (var edge in this.Edges)
+            {
+                edge.Colour.Color = Colors.Black;
+            }
         }
 
         private async Task startMaxFlowAlgo()
