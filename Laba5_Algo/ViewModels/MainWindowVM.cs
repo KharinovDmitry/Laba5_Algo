@@ -1,4 +1,5 @@
 ﻿using Graph.Core;
+using Graph.Core.Algorithms;
 using Graph.Core.Algorithms.SearchAlgo;
 using System;
 using System.Collections.Generic;
@@ -393,7 +394,81 @@ namespace Laba5_Algo.ViewModels
 
         private async Task startMaxFlowAlgo()
         {
-            throw new NotImplementedException();
+            var maxFlowAlgo = new MaxFlowAlgorithm();
+
+            foreach (var edge in Edges)
+                edge.Text = $"{0} / {edge.Weight}";
+
+            var graph = GraphVMConverter.ToModel(Vertices.ToList(), Edges.ToList(), IsOriented);
+            var result = maxFlowAlgo.Execute(
+                graph,
+                graph.Vertices.First(v => v.Name == FromVertex.Name),
+                graph.Vertices.First(v => v.Name == ToVertex.Name));
+
+            if (result == null)
+            {
+                MessageBox.Show("Нет путей");
+                return;
+            }
+
+            int i = 0;
+            int lastFlow = 0;
+            List<EdgeVM> visitedEdgesVM = new List<EdgeVM>();
+            List<EdgeVM> lastVisitedEdgesVM = new List<EdgeVM>();
+            foreach (List<Vertex> path in result.Value.Item1)
+            {
+                foreach (var vertex in Vertices)
+                    vertex.SetDefaultColor();
+
+                foreach (var edge in Edges)
+                {
+                    if (!visitedEdgesVM.Contains(edge) && lastVisitedEdgesVM.Contains(edge))
+                        visitedEdgesVM.Add(edge);
+
+                    if (lastVisitedEdgesVM.Contains(edge) && edge.Weight - lastFlow >= 0)
+                        edge.Weight -= lastFlow;
+
+                    edge.Text = $"{0} / {edge.Weight}";
+                }
+
+                lastVisitedEdgesVM = new List<EdgeVM>();
+
+                path.Reverse();
+                VertexVM lastVertexVM = Vertices.Where(n => n.Name == path[0].Name).First();
+                lastVertexVM.SetGreen();
+
+                await Task.Delay(1000);
+
+                for (int j = 1; j < path.Count; j++)
+                {
+                    VertexVM v = Vertices.Where(n => n.Name == path[j].Name).First();
+                    v.SetGreen();
+
+                    EdgeVM? e = Edges.Where(e => e.To.Name == v.Name &&
+                                            e.From.Name == lastVertexVM.Name).FirstOrDefault();
+
+                    if (e != null)
+                    {
+                        lastVisitedEdgesVM.Add(e);
+                        e.Text = $"{result.Value.Item2[i]} / {e.Weight}";
+                    }
+
+                    lastVertexVM = v;
+                    await Task.Delay(1000);
+                }
+
+                lastFlow = result.Value.Item2[i];
+                i++;
+            }
+
+            MessageBox.Show($"Выполнено!\nМаксимальный поток: {result.Value.Item2.Sum()}");
+
+            foreach (var vertex in Vertices)
+            {
+                vertex.SetDefaultColor();
+                foreach (var edge in Edges)
+                    edge.Text = $"{0} / {edge.Weight}";
+            }
         }
     }
 }
