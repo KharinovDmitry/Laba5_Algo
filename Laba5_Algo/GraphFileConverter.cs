@@ -62,7 +62,7 @@ namespace Laba5_Algo
                 int weight = int.Parse(edgeText.Split("=")[1]);
                 VertexVM from = vertices.Find(x => x.Name == edgeText.Split("=")[0].Split(",")[0]);
                 VertexVM to = vertices.Find(x => x.Name == edgeText.Split("=")[0].Split(",")[1]);
-                edges.Add(new EdgeVM(from, to, 30, weight, true));
+                edges.Add(new EdgeVM(from, to, 30, weight, isOriented));
             }
             return (vertices, edges, isOriented);
         }

@@ -127,7 +127,7 @@ namespace Laba5_Algo.ViewModels
         public int Weight
         {
             get { return weight; }
-            set { weight = value; OnPropertyChanged(nameof(Weight)); }
+            set { weight = value; Text = Weight.ToString(); OnPropertyChanged(nameof(Weight)); }
         }
 
         public int XText

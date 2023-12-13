@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -56,6 +57,7 @@ namespace Laba5_Algo.ViewModels
             Clear = new RelayCommand(clear);
             Save = new RelayCommand(save);
             Load = new RelayCommand(load);
+            SaveMatrix = new RelayCommand(saveMatrix);
             StartSearchAlgo = new RelayCommandAsync(startSearchAlgo);
             StartMaxFlowAlgo = new RelayCommandAsync(startMaxFlowAlgo);
             StartMinTreeAlgo = new RelayCommandAsync(startMinTreeAlgo);
@@ -69,6 +71,7 @@ namespace Laba5_Algo.ViewModels
             Visible = Visibility.Collapsed;
 
         }
+
 
         private bool isDragging;
         private int vertexRadius;
@@ -87,6 +90,8 @@ namespace Laba5_Algo.ViewModels
         public ICommand Clear { get; set; }
         public ICommand Save { get; set; }
         public ICommand Load { get; set; }
+        
+        public ICommand SaveMatrix { get; set; }
         public ICommand StartSearchAlgo { get; set; }
         public ICommand StartMaxFlowAlgo { get; set; }
         public ICommand StartMinPathAlgo { get; set; }
@@ -226,6 +231,7 @@ namespace Laba5_Algo.ViewModels
 
                 IsOriented = res.Item3;
                 Vertices = new ObservableCollection<VertexVM>(res.Item1);
+                vertexCount = Vertices.Count;
                 Edges = new ObservableCollection<EdgeVM>(res.Item2);
             }
             catch
@@ -241,6 +247,26 @@ namespace Laba5_Algo.ViewModels
 
             string path = openFileDialog.FilePath;
             GraphFileConverter.Save(Vertices.ToList(), Edges.ToList(), IsOriented, path);
+        }
+
+        private void saveMatrix(object obj)
+        {
+            var graph = GraphVMConverter.ToModel(Vertices.ToList(), Edges.ToList(), IsOriented);
+            var matrix = graph.GetAdjacencyMatrix();
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < Math.Sqrt(matrix.Length); i++)
+            {
+                for (int j = 0; j < Math.Sqrt(matrix.Length); j++)
+                {
+                    sb.Append(matrix[i, j] + ";");
+                }
+                sb.AppendLine();
+            }
+            if (!openFileDialog.SaveFileDialog())
+                return;
+
+            string path = openFileDialog.FilePath + ".csv";
+            File.WriteAllText(path, sb.ToString()); 
         }
 
         public void MouseMove(object sender, MouseEventArgs e)
@@ -281,7 +307,7 @@ namespace Laba5_Algo.ViewModels
             var edge = (sender as MenuItem).Tag as EdgeVM;
 
             int weight = new EditEdgeVM(edge.Weight).ShowDialog();
-            edge.Weight = weight == -1 ? edge.Weight : weight;
+            edge.Weight = weight == -1 ? edge.Weight : weight;           
         }
 
         public void RemoveVertex(object sender, RoutedEventArgs e)
@@ -548,7 +574,7 @@ namespace Laba5_Algo.ViewModels
             {
                 vertex.SetDefaultColor();
                 foreach (var edge in Edges)
-                    edge.Text = $"{0} / {edge.Weight}";
+                    edge.Text = edge.Weight.ToString();
             }
         }
     }
