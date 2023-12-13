@@ -53,14 +53,6 @@ namespace Graph.Core.Algorithms
         }
 
 
-
-        private List<Edge> Kruskals(Graph graph)
-        {
-            var vertice = graph.Vertices[0];
-
-            return new();
-        }
-
         private (List<Vertex>, List<PrimsEdge>) Prim(Graph graph)
         {
             var vertex = graph.Vertices[0];

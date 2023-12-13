@@ -21,6 +21,8 @@ namespace Graph.Core
         public Edge AddEdge(Vertex dest, int weight) 
         {
             var edge = new Edge(dest, weight);
+            edge.From = this;
+            edge.To = dest;
             Edges.Add(edge);
             return edge;
         }
@@ -32,8 +34,6 @@ namespace Graph.Core
                 foreach (var e in Edges) yield return e;
             }
         }
-
-
         public int CompareTo(Vertex? other)
         {
             return Name.CompareTo(other.Name);
