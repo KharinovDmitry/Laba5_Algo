@@ -166,5 +166,12 @@
         <ComboBox ItemsSource="{Binding Vertices}" SelectedItem="{Binding ToVertex}" HorizontalAlignment="Left" Margin="74,228,0,0" VerticalAlignment="Top" Width="60"/>
         <TextBlock HorizontalAlignment="Left" Margin="20,204,0,0" TextWrapping="Wrap" Text="Начало" VerticalAlignment="Top"/>
         <TextBlock HorizontalAlignment="Left" Margin="20,231,0,0" TextWrapping="Wrap" Text="Конец" VerticalAlignment="Top"/>
+        <Button Background="AliceBlue" Command="{Binding SaveMatrix}" Content="Матрица смежности" HorizontalAlignment="Left" Margin="7,360,0,0" VerticalAlignment="Top" Width="135">
+            <Button.Resources>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="CornerRadius" Value="5"/>
+                </Style>
+            </Button.Resources>
+        </Button>
     </Grid>
 </Window>
