@@ -386,7 +386,35 @@ namespace Laba5_Algo.ViewModels
 
         private async Task startMinPath()
         {
-            throw new NotImplementedException();
+            var graph = GraphVMConverter.ToModel(Vertices.ToList(), Edges.ToList(), IsOriented);
+             
+            ShortestPathAlgorithm algorithm = new();           
+            var vertexFrom = graph.Vertices.First(n => n.Name == FromVertex.Name);
+            var vertexTo = graph.Vertices.First(n => n.Name == ToVertex.Name);
+           
+            var (vertices, price) = algorithm.Execute(graph, vertexFrom, vertexTo);
+
+            foreach (var vertex in vertices)
+            {
+                var vmVertex = Vertices.Where(n => n.Name == vertex.Name).First();
+                vmVertex.Colour = new SolidColorBrush(Colors.Orange);
+                foreach (var edge in vertex.Edges)
+                {
+                    var currVertex = Vertices.Where(n => n.Name == edge.DestNode.Name).First();
+
+                    var oldColor = currVertex.Colour.Color;
+                    currVertex.Colour = new SolidColorBrush(Colors.LightGreen);
+                    await Task.Delay(500);
+                    currVertex.Colour = new SolidColorBrush(oldColor);
+                    await Task.Delay(500);
+                }
+            }
+            await Task.Delay(1000);
+            foreach (var vertex in Vertices)
+            {
+                vertex.SetDefaultColor();
+            }
+            MessageBox.Show(String.Format("Минимальный путь: {0}", price.ToString()));
         }
 
         private async Task startMinTreeAlgo()

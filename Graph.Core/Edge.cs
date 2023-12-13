@@ -15,7 +15,7 @@ namespace Graph.Core
 
         public Vertex DestNode { get; set; }
 
-        public Vertex OtherNode(Vertex vertex)
+        public Vertex OtherEdge(Vertex vertex)
         {
             if (!IsIncident(vertex)) throw new ArgumentException();
             if (From == vertex) return To;
@@ -26,12 +26,7 @@ namespace Graph.Core
             return From == vertex || To == vertex;
         }
 
-        public int CompareTo(Edge other)
-        {
-            if (other == null) return 1;
-            return Weight.CompareTo(other.Weight);
-        }
-
+  
         public Edge(Vertex to, int weight) 
         {
             DestNode = to;
@@ -42,6 +37,12 @@ namespace Graph.Core
             From = from;
             To = to;
             Weight = weight;
+        }
+
+        public int CompareTo(Edge other)
+        {
+            if (other == null) return 1;
+            return Weight.CompareTo(other.Weight);
         }
     }
 }
