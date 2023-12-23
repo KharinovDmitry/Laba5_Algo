@@ -507,6 +507,13 @@ namespace Laba5_Algo.ViewModels
                 edge.Text = $"{0} / {edge.Weight}";
 
             var graph = GraphVMConverter.ToModel(Vertices.ToList(), Edges.ToList(), IsOriented);
+
+            if(FromVertex == null || ToVertex == null)
+            {
+                MessageBox.Show("Выберите вершины");
+                return;
+            }
+
             var result = maxFlowAlgo.Execute(
                 graph,
                 graph.Vertices.First(v => v.Name == FromVertex.Name),
