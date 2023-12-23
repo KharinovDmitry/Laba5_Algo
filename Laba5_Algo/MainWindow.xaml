@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Laba5_Algo" 
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid Background="LightBlue">
-        <Canvas Margin="150, 0, 0, 0" Background="AliceBlue"  MouseLeftButtonDown="Canvas_MouseLeftButtonDown" MouseMove="Canvas_MouseMove">
+        Title="MainWindow" Height="600" Width="800">
+    <Grid Background="LightBlue" Margin="0,0,0,-70">
+        <Canvas Margin="200, 0, 0, 0" Background="AliceBlue"  MouseLeftButtonDown="Canvas_MouseLeftButtonDown" MouseMove="Canvas_MouseMove">
             <Line Margin="15, 15, 0, 0" 
                   X1="{Binding SelectedVertex.X}" 
                   Y1="{Binding SelectedVertex.Y}" 
@@ -110,52 +110,52 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </Canvas>
-        <Button Background="AliceBlue" Command="{Binding Save}" Content="Сохранить" HorizontalAlignment="Left" Margin="7,10,0,0" VerticalAlignment="Top" Width="135">
+        <Button Background="AliceBlue" Command="{Binding Save}" Content="Сохранить" HorizontalAlignment="Left" Margin="7,10,0,0" VerticalAlignment="Top" Width="185">
             <Button.Resources>
                 <Style TargetType="Border">
                     <Setter Property="CornerRadius" Value="5"/>
                 </Style>
             </Button.Resources>
         </Button>
-        <Button Background="AliceBlue"  Command="{Binding Load}" Content="Загрузить" HorizontalAlignment="Left" Margin="7,35,0,0" VerticalAlignment="Top" Width="135">
+        <Button Background="AliceBlue"  Command="{Binding Load}" Content="Загрузить" HorizontalAlignment="Left" Margin="7,35,0,0" VerticalAlignment="Top" Width="185">
             <Button.Resources>
                 <Style TargetType="Border">
                     <Setter Property="CornerRadius" Value="5"/>
                 </Style>
             </Button.Resources>
         </Button>
-        <Button Background="AliceBlue" Command="{Binding Clear}" Content="Очистить" HorizontalAlignment="Left" Margin="7,60,0,0" VerticalAlignment="Top" Width="135">
+        <Button Background="AliceBlue" Command="{Binding Clear}" Content="Очистить" HorizontalAlignment="Left" Margin="7,60,0,0" VerticalAlignment="Top" Width="185">
             <Button.Resources>
                 <Style TargetType="Border">
                     <Setter Property="CornerRadius" Value="5"/>
                 </Style>
             </Button.Resources>
         </Button>
-        <CheckBox Name="OrientedCB" Content="Ориентировнный" IsChecked="{Binding IsOriented}" HorizontalAlignment="Left" Margin="7,85,0,0" VerticalAlignment="Top" Width="135"/>
+        <CheckBox Name="OrientedCB" Content="Ориентировнный" IsChecked="{Binding IsOriented}" HorizontalAlignment="Left" Margin="7,85,0,0" VerticalAlignment="Top" Width="185"/>
         <TextBlock Text="Обход графа" HorizontalAlignment="Left" Margin="7,110,0,0" VerticalAlignment="Top" Width="135"/>
-        <ComboBox ItemsSource="{Binding SearchAlgorithms}" SelectedItem="{Binding SelectedSearchAlgo}" HorizontalAlignment="Left" Margin="7,135,0,0" VerticalAlignment="Top" Width="135"/>
-        <Button Background="AliceBlue" Command="{Binding StartSearchAlgo}" Content="Обойти граф" HorizontalAlignment="Left" Margin="7,170,0,0" VerticalAlignment="Top" Width="135">
+        <ComboBox ItemsSource="{Binding SearchAlgorithms}" SelectedItem="{Binding SelectedSearchAlgo}" HorizontalAlignment="Left" Margin="7,134,0,0" VerticalAlignment="Top" Width="184"/>
+        <Button Background="AliceBlue" Command="{Binding StartSearchAlgo}" Content="Обойти граф" HorizontalAlignment="Left" Margin="6,161,0,0" VerticalAlignment="Top" Width="185">
             <Button.Resources>
                 <Style TargetType="Border">
                     <Setter Property="CornerRadius" Value="5"/>
                 </Style>
             </Button.Resources>
         </Button>
-        <Button Background="AliceBlue" Command="{Binding StartMaxFlowAlgo}" Content="Максимальный поток" HorizontalAlignment="Left" Margin="7,260,0,0" VerticalAlignment="Top" Width="135">
+        <Button Background="AliceBlue" Command="{Binding StartMaxFlowAlgo}" Content="Максимальный поток" HorizontalAlignment="Left" Margin="7,260,0,0" VerticalAlignment="Top" Width="185">
             <Button.Resources>
                 <Style TargetType="{x:Type Border}">
                     <Setter Property="CornerRadius" Value="5"/>
                 </Style>
             </Button.Resources>
         </Button>
-        <Button Background="AliceBlue" Command="{Binding StartMinPathAlgo}" Content="Минимальный путь" HorizontalAlignment="Left" Margin="7,290,0,0" VerticalAlignment="Top" Width="135">
+        <Button Background="AliceBlue" Command="{Binding StartMinPathAlgo}" Content="Минимальный путь" HorizontalAlignment="Left" Margin="7,290,0,0" VerticalAlignment="Top" Width="185">
             <Button.Resources>
                 <Style TargetType="{x:Type Border}">
                     <Setter Property="CornerRadius" Value="5"/>
                 </Style>
             </Button.Resources>
         </Button>
-        <Button Background="AliceBlue" Command="{Binding StartMinTreeAlgo}" Content="Минимальное дерево" HorizontalAlignment="Left" Margin="7,320,0,0" VerticalAlignment="Top" Width="135">
+        <Button Background="AliceBlue" Command="{Binding StartMinTreeAlgo}" Content="Минимальное дерево" HorizontalAlignment="Left" Margin="7,320,0,0" VerticalAlignment="Top" Width="185">
             <Button.Resources>
                 <Style TargetType="{x:Type Border}">
                     <Setter Property="CornerRadius" Value="5"/>
@@ -166,12 +166,13 @@
         <ComboBox ItemsSource="{Binding Vertices}" SelectedItem="{Binding ToVertex}" HorizontalAlignment="Left" Margin="74,228,0,0" VerticalAlignment="Top" Width="60"/>
         <TextBlock HorizontalAlignment="Left" Margin="20,204,0,0" TextWrapping="Wrap" Text="Начало" VerticalAlignment="Top"/>
         <TextBlock HorizontalAlignment="Left" Margin="20,231,0,0" TextWrapping="Wrap" Text="Конец" VerticalAlignment="Top"/>
-        <Button Background="AliceBlue" Command="{Binding SaveMatrix}" Content="Матрица смежности" HorizontalAlignment="Left" Margin="7,360,0,0" VerticalAlignment="Top" Width="135">
+        <Button Background="AliceBlue" Command="{Binding SaveMatrix}" Content="Матрица смежности" HorizontalAlignment="Left" Margin="7,350,0,0" VerticalAlignment="Top" Width="185">
             <Button.Resources>
                 <Style TargetType="{x:Type Border}">
                     <Setter Property="CornerRadius" Value="5"/>
                 </Style>
             </Button.Resources>
         </Button>
+        <ListBox ItemsSource="{Binding Logs}" Margin="7,375,609,75"/>
     </Grid>
 </Window>
