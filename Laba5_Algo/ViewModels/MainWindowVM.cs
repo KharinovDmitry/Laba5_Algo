@@ -41,6 +41,14 @@ namespace Laba5_Algo.ViewModels
             set { selectedSearchAlgo = value; OnPropertyChanged(nameof(SelectedSearchAlgo)); }
         }
 
+        private ObservableCollection<string> logs;
+        public ObservableCollection<string> Logs {
+            get { 
+                return logs;
+                OnPropertyChanged(nameof(Logs));
+            }
+        }
+
         public MainWindowVM()
         {
             SearchAlgorithms = new ObservableCollection<IGraphSearch>()
@@ -53,6 +61,7 @@ namespace Laba5_Algo.ViewModels
             VertexRadius = 30;
             Vertices = new ObservableCollection<VertexVM>();
             Edges = new ObservableCollection<EdgeVM>();
+            logs = new ObservableCollection<string>();
 
             Clear = new RelayCommand(clear);
             Save = new RelayCommand(save);
@@ -69,7 +78,6 @@ namespace Laba5_Algo.ViewModels
             IsConnecting = false;
             IsOriented = false;
             Visible = Visibility.Collapsed;
-
         }
 
 
@@ -400,6 +408,7 @@ namespace Laba5_Algo.ViewModels
             foreach (var node in nodes)
             {
                 Vertices.Where(n => n.Name == node.Name).First().SetGreen();
+                Logs.Insert(0, $"Посещаем вершину {node.Name}");
                 await Task.Delay(500);
             }
             MessageBox.Show("Выполнено");
@@ -408,6 +417,7 @@ namespace Laba5_Algo.ViewModels
             {
                 vertex.SetDefaultColor();
             }
+            Logs.Clear();
         }
 
         private async Task startMinPath()
