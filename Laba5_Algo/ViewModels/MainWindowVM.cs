@@ -518,7 +518,7 @@ namespace Laba5_Algo.ViewModels
 
             var graph = GraphVMConverter.ToModel(Vertices.ToList(), Edges.ToList(), IsOriented);
 
-            if(FromVertex == null || ToVertex == null)
+            if (FromVertex == null || ToVertex == null)
             {
                 MessageBox.Show("Выберите вершины");
                 return;
@@ -541,6 +541,8 @@ namespace Laba5_Algo.ViewModels
             List<EdgeVM> lastVisitedEdgesVM = new List<EdgeVM>();
             foreach (List<Vertex> path in result.Value.Item1)
             {
+                Logs.Insert(0, $"Обновляем остаточный граф");
+
                 foreach (var vertex in Vertices)
                     vertex.SetDefaultColor();
 
@@ -560,6 +562,7 @@ namespace Laba5_Algo.ViewModels
                 path.Reverse();
                 VertexVM lastVertexVM = Vertices.Where(n => n.Name == path[0].Name).First();
                 lastVertexVM.SetGreen();
+                Logs.Insert(0, $"Начинаем из вершины {lastVertexVM.Name}");
 
                 await Task.Delay(1000);
 
@@ -567,6 +570,7 @@ namespace Laba5_Algo.ViewModels
                 {
                     VertexVM v = Vertices.Where(n => n.Name == path[j].Name).First();
                     v.SetGreen();
+                    Logs.Insert(0, $"Посещаем вершину {v.Name}");
 
                     EdgeVM? e = Edges.Where(e => e.To.Name == v.Name &&
                                             e.From.Name == lastVertexVM.Name).FirstOrDefault();
