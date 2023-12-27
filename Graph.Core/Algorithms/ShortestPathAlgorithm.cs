@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using static Graph.Core.Algorithms.MinTreeAlgorithm;
 
 namespace Graph.Core.Algorithms
 {
@@ -45,18 +46,19 @@ namespace Graph.Core.Algorithms
 
       
         
-        public (List<Vertex>, double) Execute(Graph graph, Vertex from, Vertex to)
+        public (List<Vertex>, double, List<Edge>) Execute(Graph graph, Vertex from, Vertex to)
         {
             //TODO
             //throw new NotImplementedException();
             return Dijkstra(graph, from, to);
 
         }
-        public static (List<Vertex>, double) Dijkstra(Graph graph, Vertex from, Vertex to)
+        public static (List<Vertex>, double, List<Edge>) Dijkstra(Graph graph, Vertex from, Vertex to)
         {
             //TODO
             var notVisited = graph.Vertices.ToList();
             var track = new Dictionary<Vertex, DijkstraData>();
+            List<Edge> edges = new();
             track[from] = new DijkstraData { Price = 0, Previous = null };
 
             while (true) 
@@ -72,7 +74,7 @@ namespace Graph.Core.Algorithms
                     }
                 }
 
-                if (toOpen == null) return (null, 0);
+                if (toOpen == null) return (null, 0, null);
                 if (toOpen == to) break;
 
                 foreach (var e in toOpen.IncidentEdges.Where(z => z.From == toOpen))
@@ -84,6 +86,7 @@ namespace Graph.Core.Algorithms
                         track[nextEdge] = new DijkstraData { Previous = toOpen, Price = currentPrice };
                     }
                 }
+                
                 notVisited.Remove(toOpen);
             }
             var result = new List<Vertex>();
@@ -91,10 +94,14 @@ namespace Graph.Core.Algorithms
             while (to != null)
             {
                 result.Add(to);
+                if (track[to].Previous != null)
+                    edges.Add(to.Edges.Where(x => x.From.Name == track[to].Previous.Name || x.To.Name == track[to].Previous.Name).FirstOrDefault());
                 to = track[to].Previous;
+                
             }
             result.Reverse();
-            return (result, price);
+            edges.Reverse();
+            return (result, price, edges);
         }
     }
     class DijkstraData

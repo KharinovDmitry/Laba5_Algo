@@ -20,7 +20,7 @@ namespace Laba5_Algo.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
         }
 
-        private int x;
+        protected int x;
         public int X
         {
             get { return x; }
@@ -31,7 +31,7 @@ namespace Laba5_Algo.ViewModels
                 XName = X + 11 - 4 * (Name.Length - 1);
             }
         }
-        private int y;
+        protected int y;
         public int Y
         {
             get { return y; }
