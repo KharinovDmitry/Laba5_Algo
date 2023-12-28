@@ -12,7 +12,7 @@ namespace Graph.Core.Algorithms
     public class MinTreeAlgorithm
     {
 
-        private class PrimsVertex : Vertex
+        public class PrimsVertex : Vertex
         {
             public int MinPath { get; set; }
             public PrimsVertex MinVertex { get; set; }
@@ -44,7 +44,7 @@ namespace Graph.Core.Algorithms
             }
 
         }
-        public (List<Vertex>, List<PrimsEdge>) Execute(Graph graph)
+        public (List<Vertex>, List<PrimsEdge>, Dictionary<Vertex, PrimsVertex>) Execute(Graph graph)
         {
             if (graph.IsOriented)
                 return new();
@@ -53,9 +53,10 @@ namespace Graph.Core.Algorithms
         }
 
 
-        private (List<Vertex>, List<PrimsEdge>) Prim(Graph graph)
+        private (List<Vertex>, List<PrimsEdge>, Dictionary<Vertex, PrimsVertex>) Prim(Graph graph)
         {
             var vertex = graph.Vertices[0];
+            List<String> Logs = new ();
 
             Dictionary<Vertex, PrimsVertex> origToTemp = new();
             List<Vertex> vertices = new();
@@ -83,14 +84,14 @@ namespace Graph.Core.Algorithms
                         newVertex.MinPath = edge.Weight;
 
                         origToTemp.Add(edge.DestNode, newVertex);
-                        Trace.WriteLine($"Warning: Found new vertex {newVertex.Name} ! with weight {edge.Weight} from {origToTemp[vertex].Name} ");
+                        Logs.Add($"Warning: Found new vertex {newVertex.Name} ! with weight {edge.Weight} from {origToTemp[vertex].Name} ");
                     }
                     else
                     {
-                        Trace.WriteLine($"Warning: Entered previous vertex {origToTemp[edge.DestNode].Name} ! with weight {edge.Weight} from {origToTemp[vertex].Name} ");
+                        Logs.Add($"Warning: Entered previous vertex {origToTemp[edge.DestNode].Name} ! with weight {edge.Weight} from {origToTemp[vertex].Name} ");
                         if (origToTemp[edge.DestNode].Include)
                         {
-                            Trace.WriteLine($"Warning: Skip Included vertex {origToTemp[edge.DestNode].Name} ! with weight {edge.Weight} from {origToTemp[vertex].Name} ");
+                            Logs.Add($"Warning: Skip Included vertex {origToTemp[edge.DestNode].Name} ! with weight {edge.Weight} from {origToTemp[vertex].Name} ");
                             continue;
                         }
                         //step 3. update minimal path and minimal verte
@@ -98,15 +99,15 @@ namespace Graph.Core.Algorithms
                         {
                             origToTemp[edge.DestNode].MinPath = edge.Weight;
                             origToTemp[edge.DestNode].MinVertex = origToTemp[vertex];
-                            Trace.WriteLine($"Warning: Updated {origToTemp[edge.DestNode].Name} new minPath={edge.Weight} new minVertex={origToTemp[vertex]}");
+                            Logs.Add($"Warning: Updated {origToTemp[edge.DestNode].Name} new minPath={edge.Weight} new minVertex={origToTemp[vertex]}");
                         }
                     }
                 }
                 var notIcludedVertecies = origToTemp.Values.Where(vtx => !vtx.Include);
                 if (notIcludedVertecies.Count() == 0)
                 {
-                    Trace.WriteLine($"Warning: The fucking end ! Verts: {vertices.Count} Edges: {edges.Count} ");
-                    return new(vertices, edges);
+                    Logs.Add($"Warning: The end ! Verts: {vertices.Count} Edges: {edges.Count} ");
+                    return new(vertices, edges, origToTemp);
                 }
 
                 vertex = notIcludedVertecies.Aggregate((curMinVtx, vtx) => (vtx.MinPath < curMinVtx.MinPath ? vtx : curMinVtx));
@@ -115,13 +116,13 @@ namespace Graph.Core.Algorithms
                 origToTemp[vertex].AddEdge(origToTemp[vertex].MinVertex, origToTemp[vertex].MinPath);
                 origToTemp[vertex].MinVertex.AddEdge(vertex, origToTemp[vertex].MinPath);
 
-                Trace.WriteLine($"Warning: New Edge from  {origToTemp[vertex].MinVertex.Name} to {origToTemp[vertex].Name}");
+                Logs.Add($"Warning: New Edge from  {origToTemp[vertex].MinVertex.Name} to {origToTemp[vertex].Name}");
                 edges.Add(new(origToTemp[vertex].MinVertex, origToTemp[vertex], origToTemp[vertex].MinPath));
 
 
                 origToTemp[vertex].Include = true;
 
-                Trace.WriteLine($"Warning: New Included Vertex {origToTemp[vertex].Name} ");
+                Logs.Add($"Warning: New Included Vertex {origToTemp[vertex].Name} ");
                 vertices.Add(vertex);
             }
         }

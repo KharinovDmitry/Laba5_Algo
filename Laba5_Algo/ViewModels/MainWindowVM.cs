@@ -18,6 +18,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Xml.Linq;
+using static Graph.Core.Algorithms.MinTreeAlgorithm;
 
 namespace Laba5_Algo.ViewModels
 {
@@ -42,8 +43,10 @@ namespace Laba5_Algo.ViewModels
         }
 
         private ObservableCollection<string> logs;
-        public ObservableCollection<string> Logs {
-            get { 
+        public ObservableCollection<string> Logs
+        {
+            get
+            {
                 return logs;
                 OnPropertyChanged(nameof(Logs));
             }
@@ -60,6 +63,7 @@ namespace Laba5_Algo.ViewModels
 
             VertexRadius = 30;
             Vertices = new ObservableCollection<VertexVM>();
+          
             Edges = new ObservableCollection<EdgeVM>();
             logs = new ObservableCollection<string>();
 
@@ -98,7 +102,7 @@ namespace Laba5_Algo.ViewModels
         public ICommand Clear { get; set; }
         public ICommand Save { get; set; }
         public ICommand Load { get; set; }
-        
+
         public ICommand SaveMatrix { get; set; }
         public ICommand StartSearchAlgo { get; set; }
         public ICommand StartMaxFlowAlgo { get; set; }
@@ -115,6 +119,8 @@ namespace Laba5_Algo.ViewModels
                 OnPropertyChanged(nameof(Vertices));
             }
         }
+
+     
 
         private ObservableCollection<EdgeVM> edges;
         public ObservableCollection<EdgeVM> Edges
@@ -274,7 +280,7 @@ namespace Laba5_Algo.ViewModels
                 return;
 
             string path = openFileDialog.FilePath + ".csv";
-            File.WriteAllText(path, sb.ToString()); 
+            File.WriteAllText(path, sb.ToString());
         }
 
         public void MouseMove(object sender, MouseEventArgs e)
@@ -315,7 +321,7 @@ namespace Laba5_Algo.ViewModels
             var edge = (sender as MenuItem).Tag as EdgeVM;
 
             int weight = new EditEdgeVM(edge.Weight).ShowDialog();
-            edge.Weight = weight == -1 ? edge.Weight : weight;           
+            edge.Weight = weight == -1 ? edge.Weight : weight;
         }
 
         public void RemoveVertex(object sender, RoutedEventArgs e)
@@ -423,81 +429,149 @@ namespace Laba5_Algo.ViewModels
         private async Task startMinPath()
         {
             var graph = GraphVMConverter.ToModel(Vertices.ToList(), Edges.ToList(), IsOriented);
-             
-            ShortestPathAlgorithm algorithm = new();           
+
+            if (FromVertex == null || ToVertex == null)
+            {
+                MessageBox.Show("Выберите вершины");
+                return;
+            }
+            ShortestPathAlgorithm algorithm = new();
             var vertexFrom = graph.Vertices.First(n => n.Name == FromVertex.Name);
             var vertexTo = graph.Vertices.First(n => n.Name == ToVertex.Name);
-           
-            var (vertices, price) = algorithm.Execute(graph, vertexFrom, vertexTo);
+
+            var (vertices, price, edges) = algorithm.Execute(graph, vertexFrom, vertexTo);
 
             foreach (var vertex in vertices)
             {
                 var vmVertex = Vertices.Where(n => n.Name == vertex.Name).First();
                 vmVertex.Colour = new SolidColorBrush(Colors.Orange);
+
                 foreach (var edge in vertex.Edges)
                 {
                     var currVertex = Vertices.Where(n => n.Name == edge.DestNode.Name).First();
+                    var edgeVM = this.Edges.Where(x => (x.From.Name == edge.From.Name && x.To.Name == edge.To.Name) || (x.To.Name == edge.From.Name && x.From.Name == edge.To.Name)).FirstOrDefault();
 
+                    var oldColorEdge = edgeVM.Colour.Color;
                     var oldColor = currVertex.Colour.Color;
+
                     currVertex.Colour = new SolidColorBrush(Colors.LightGreen);
+                    edgeVM.Colour = new SolidColorBrush(Colors.Blue);
+                    Logs.Add($"Check edge {edge.From.Name}-{edge.To.Name} with weight:{edge.Weight}");
                     await Task.Delay(500);
+                    edgeVM.Colour = new SolidColorBrush(oldColorEdge);
                     currVertex.Colour = new SolidColorBrush(oldColor);
                     await Task.Delay(500);
+                    Logs.Add($"Comparing edges");
                 }
+                foreach (var edge in edges)
+                {
+                    var edgeVM = this.Edges.Where(x => (x.From.Name == edge.From.Name && x.To.Name == edge.To.Name) || (x.To.Name == edge.From.Name && x.From.Name == edge.To.Name)).FirstOrDefault();
+                    if (edgeVM != null)
+                    {
+                        edgeVM.Colour = new SolidColorBrush(Colors.Red);
+                        Logs.Add($"Edge {edgeVM.From.Name}-{edgeVM.To.Name} chosen");
+                        await Task.Delay(500);
+                        edges.Remove(edge);
+                        break;
+                    }
+                }
+
             }
             await Task.Delay(1000);
             foreach (var vertex in Vertices)
             {
                 vertex.SetDefaultColor();
             }
+            foreach (var edge in this.Edges)
+            {
+                edge.Colour.Color = Colors.Black;
+            }
+            await Task.Delay(500);
+            Logs.Clear();
             MessageBox.Show(String.Format("Минимальный путь: {0}", price.ToString()));
         }
-
+      
+        private void converToPrims()
+        {
+            //for vertecies[i] = new PromimsVertex(vertecies[i])
+            for (int i = 0; i < Vertices.Count; i++)
+            {
+                Vertices[i] = new PrimsVertexVM(Vertices[i].X, Vertices[i].Y, Vertices[i].Name, 0, null);
+            }
+        }
         private async Task startMinTreeAlgo()
         {
+            converToPrims();
             var graph = GraphVMConverter.ToModel(Vertices.ToList(), Edges.ToList(), IsOriented);
-
+            
             MinTreeAlgorithm algorithm = new();
-            var (vertices, edges) = algorithm.Execute(graph);
+            var (vertices, edges, origToTemp) = algorithm.Execute(graph);
             var prevVertex = Vertices.Where(n => n.Name == vertices[0].Name).First();
             prevVertex.Colour = new SolidColorBrush(Colors.Orange);
             var vmVertex = prevVertex;
             int currEdgeIndex = 0;
+            
             foreach (var vertex in vertices)
             {
+
                 vmVertex = Vertices.Where(n => n.Name == vertex.Name).First();
                 vmVertex.Colour = new SolidColorBrush(Colors.Orange);
+                EdgeVM edgeVM;
 
                 foreach (var edge in vertex.Edges)
                 {
-                    var currVertex = Vertices.Where(n => n.Name == edge.DestNode.Name).First();
+
+                    var currVertex = Vertices.Where(n => n.Name == edge.DestNode.Name).First() as PrimsVertexVM;
+                    edgeVM = this.Edges.Where(x => (x.From.Name == edge.From.Name && x.To.Name == edge.To.Name) || (x.To.Name == edge.From.Name && x.From.Name == edge.To.Name)).FirstOrDefault();
 
                     var oldColor = currVertex.Colour.Color;
+                    var oldColorEdge = edgeVM.Colour.Color;
+                    
+                    foreach (KeyValuePair<Vertex, PrimsVertex> data in origToTemp)
+                    {
+                        if (currVertex.Name == data.Key.Name)
+                        {
+                            currVertex.MinPath = data.Value.MinPath;
+                            if (data.Value.MinVertex != null)
+                            {
+                                currVertex.MinVertex = data.Value.MinVertex.Name;
+                                break;
+                            }
+                        }                     
+                    }
+                    
                     currVertex.Colour = new SolidColorBrush(Colors.LightGreen);
+                    edgeVM.Colour = new SolidColorBrush(Colors.Blue);
+                    Logs.Add($"Check edge {edge.From.Name}-{edge.To.Name} with weight:{edge.Weight}");
                     await Task.Delay(500);
+                    edgeVM.Colour = new SolidColorBrush(oldColorEdge);
                     currVertex.Colour = new SolidColorBrush(oldColor);
                     await Task.Delay(500);
+                    Logs.Add($"Comparing edges");
                 }
 
                 var primEdge = edges[Math.Min(currEdgeIndex, edges.Count - 1)];
+
+                edgeVM = this.Edges.Where(edge => edge.From.Name == primEdge.From.Name && edge.To.Name == primEdge.To.Name).FirstOrDefault();
+                if (edgeVM != null)
                 {
-                    var edgeVM = this.Edges.Where(edge => edge.From.Name == primEdge.From.Name && edge.To.Name == primEdge.To.Name).FirstOrDefault();
-                    if (edgeVM != null)
-                    {
-                        edgeVM.Colour = new SolidColorBrush(Colors.Red);
-                    }
-                    edgeVM = this.Edges.Where(edge => edge.To.Name == primEdge.From.Name && edge.From.Name == primEdge.To.Name).FirstOrDefault();
-                    if (edgeVM != null)
-                    {
-                        edgeVM.Colour = new SolidColorBrush(Colors.Red);
-                    }
-                    currEdgeIndex++;
+                    edgeVM.Colour = new SolidColorBrush(Colors.Red);
+                    Logs.Add($"Edge {edgeVM.From.Name}-{edgeVM.To.Name} chosen");
                 }
+                edgeVM = this.Edges.Where(edge => edge.To.Name == primEdge.From.Name && edge.From.Name == primEdge.To.Name).FirstOrDefault();
+                if (edgeVM != null)
+                {
+                    edgeVM.Colour = new SolidColorBrush(Colors.Red);
+                    Logs.Add($"Edge {edgeVM.From.Name}-{edgeVM.To.Name} chosen");
+                }
+                currEdgeIndex++;
+
 
                 prevVertex = vmVertex;
                 await Task.Delay(500);
 
             }
+
 
             foreach (var vertex in Vertices)
             {
@@ -507,6 +581,8 @@ namespace Laba5_Algo.ViewModels
             {
                 edge.Colour.Color = Colors.Black;
             }
+            await Task.Delay(500);
+            Logs.Clear();
         }
 
         private async Task startMaxFlowAlgo()

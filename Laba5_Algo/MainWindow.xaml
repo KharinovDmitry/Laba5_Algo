@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Laba5_Algo" 
+        xmlns:localVM="clr-namespace:Laba5_Algo.ViewModels"
         mc:Ignorable="d"
         Title="MainWindow" Height="600" Width="800">
     <Grid Background="LightBlue" Margin="0,0,0,-70">
@@ -64,14 +65,7 @@
                           Margin="0,0,0,0">
                 <ItemsControl.Resources>
                     <local:BindingProxy x:Key="Proxy" Data="{Binding}" />
-                </ItemsControl.Resources>
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <Canvas />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
+                    <DataTemplate DataType="{x:Type localVM:VertexVM}">
                         <Canvas>
                             <Ellipse Width="30" Height="30" Fill="{Binding Colour}"
                                  MouseLeftButtonUp="Ellipse_MouseLeftButtonUp">
@@ -105,9 +99,66 @@
                                     <TranslateTransform X="{Binding XName}" Y="{Binding YName}"/>
                                 </TextBlock.RenderTransform>
                             </TextBlock>
+
                         </Canvas>
                     </DataTemplate>
-                </ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="{x:Type localVM:PrimsVertexVM}">
+                        <Canvas>
+                            <Ellipse Width="30" Height="30" Fill="{Binding Colour}"
+                                 MouseLeftButtonUp="Ellipse_MouseLeftButtonUp">
+                                <Ellipse.RenderTransform>
+                                    <TranslateTransform X="{Binding X}" Y="{Binding Y}" />
+                                </Ellipse.RenderTransform>
+                                <Ellipse.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem    
+                                        Command="{Binding Source={StaticResource Proxy}, Path=Data.ConnectVertex}"
+                                        Click="ConnectVertex_Click"
+                                        Header="Связать вершину">
+                                            <MenuItem.Tag >
+                                                <Binding Path="PlacementTarget.DataContext" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}" />
+                                            </MenuItem.Tag>
+                                        </MenuItem>
+                                        <MenuItem 
+                                        Command="{Binding Source={StaticResource Proxy}, Path=Data.RemoveVertex}"
+                                        Click="RemoveVertex_Click"
+                                        Header="Удалить вершину">
+                                            <MenuItem.Tag>
+                                                <Binding Path="PlacementTarget.DataContext" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}" />
+                                            </MenuItem.Tag>
+                                        </MenuItem>
+                                    </ContextMenu>
+                                </Ellipse.ContextMenu>
+                            </Ellipse>
+                            <TextBlock Text="{Binding Name}"
+                                       MouseLeftButtonUp="Ellipse_MouseLeftButtonUp">
+                                <TextBlock.RenderTransform>
+                                    <TranslateTransform X="{Binding XName}" Y="{Binding YName}"/>
+                                </TextBlock.RenderTransform>
+                            </TextBlock>
+                            <TextBlock Text="{Binding MinVertex}"
+                                       MouseLeftButtonUp="Ellipse_MouseLeftButtonUp">
+                                <TextBlock.RenderTransform>
+                                    <TranslateTransform X="{Binding VertexX}" Y="{Binding VertexY}"/>
+                                </TextBlock.RenderTransform>
+                            </TextBlock>
+                            <TextBlock Text="{Binding MinPath}"
+                                       MouseLeftButtonUp="Ellipse_MouseLeftButtonUp">
+                                <TextBlock.RenderTransform>
+                                    <TranslateTransform X="{Binding PathX}" Y="{Binding PathY}"/>
+                                </TextBlock.RenderTransform>
+                            </TextBlock>
+
+
+                        </Canvas>
+                    </DataTemplate>
+                </ItemsControl.Resources>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+
             </ItemsControl>
         </Canvas>
         <Button Background="AliceBlue" Command="{Binding Save}" Content="Сохранить" HorizontalAlignment="Left" Margin="7,10,0,0" VerticalAlignment="Top" Width="185">
