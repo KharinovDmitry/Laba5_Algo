@@ -13,54 +13,7 @@ namespace Laba5_Algo.ViewModels
 {
     public class PrimsVertexVM : VertexVM
     {
-        private int minPath;
-        private int minVertex;
-        public int MinPath
-        {
-            get { return minPath; }
-            set { minPath = value; OnPropertyChanged(nameof(MinPath)); }
-        }
-    
-        public int MinVertex
-        {
-            get { return minVertex; }
-            set { minVertex = value; OnPropertyChanged(nameof(MinVertex)); }
-        }
-        
-        public PrimsVertexVM(int x, int y, string name, int minPath, int minVertex) : base(x, y, name)
-        {
-            MinPath = minPath;
-            MinVertex = minVertex;
-        }
-        private int pathX;
-        private int pathY;
-        private int vertexX;
-        private int vertexY;
-
-        public int PathX
-        {
-            get { return pathX; }
-            set { pathX = value; OnPropertyChanged(nameof(PathX)); }      
-        }
-
-        public int VertexX
-        {
-            get { return vertexX; }
-            set { vertexX = value; OnPropertyChanged(nameof(VertexX)); }
-        }
-
-        public int PathY
-        {
-            get { return pathY; }
-            set { pathY = value; OnPropertyChanged(nameof(PathY)); }
-        }
-
-        public int VertexY
-        {
-            get { return vertexY; }
-            set { vertexY = value; OnPropertyChanged(nameof(VertexY)); }
-        }
-        
+      
         public new int X
         {
             get { return x; }
@@ -69,10 +22,11 @@ namespace Laba5_Algo.ViewModels
                 x = value;
                 OnPropertyChanged(nameof(X));
                 XName = X + 11 - 4 * (Name.Length - 1);
-                PathX = XName - 5;
-                VertexX = XName - 35;
+                PathX = X + 15;
+                VertexX = X - 5;
             }
         }
+        
         public new int Y
         {
             get { return y; }
@@ -81,12 +35,56 @@ namespace Laba5_Algo.ViewModels
                 y = value;
                 OnPropertyChanged(nameof(Y));
                 YName = Y + 7;
-                PathY = YName - 2;
+                PathY = Y - 7;
                 VertexY = PathY;
             }
         }
+        private int minPath;
+        private string minVertex;
+        public int MinPath
+        {
+            get { return minPath; }
+            set { minPath = value; OnPropertyChanged(nameof(MinPath)); }
+        }
+    
+        public string MinVertex
+        {
+            get { return minVertex; }
+            set { minVertex = value; OnPropertyChanged(nameof(MinVertex)); }
+        }
+                               
         
-
-
+        private int pathX;
+        public int PathX
+        {
+            get { return pathX; }
+            set { pathX = value; OnPropertyChanged(nameof(PathX)); }      
+        }
+        private int pathY;
+        public int PathY
+        {
+            get { return pathY; }
+            set { pathY = value; OnPropertyChanged(nameof(PathY)); }
+        }
+        private int vertexX;
+        public int VertexX
+        {
+            get { return vertexX; }
+            set { vertexX = value; OnPropertyChanged(nameof(VertexX)); }
+        }
+        private int vertexY;
+        public int VertexY
+        {
+            get { return vertexY; }
+            set { vertexY = value; OnPropertyChanged(nameof(VertexY)); }
+        }
+           
+        public PrimsVertexVM(int x, int y, string name, int minPath, string minVertex) : base(x, y, name)
+        {
+            MinPath = minPath;
+            MinVertex = minVertex;
+            X = x;
+            Y = y;
+        }
     }
 }

@@ -430,6 +430,11 @@ namespace Laba5_Algo.ViewModels
         {
             var graph = GraphVMConverter.ToModel(Vertices.ToList(), Edges.ToList(), IsOriented);
 
+            if (FromVertex == null || ToVertex == null)
+            {
+                MessageBox.Show("Выберите вершины");
+                return;
+            }
             ShortestPathAlgorithm algorithm = new();
             var vertexFrom = graph.Vertices.First(n => n.Name == FromVertex.Name);
             var vertexTo = graph.Vertices.First(n => n.Name == ToVertex.Name);
@@ -491,7 +496,7 @@ namespace Laba5_Algo.ViewModels
             //for vertecies[i] = new PromimsVertex(vertecies[i])
             for (int i = 0; i < Vertices.Count; i++)
             {
-                Vertices[i] = new PrimsVertexVM(Vertices[i].X, Vertices[i].Y, Vertices[i].Name, 0, 0);
+                Vertices[i] = new PrimsVertexVM(Vertices[i].X, Vertices[i].Y, Vertices[i].Name, 0, null);
             }
         }
         private async Task startMinTreeAlgo()
@@ -527,8 +532,11 @@ namespace Laba5_Algo.ViewModels
                         if (currVertex.Name == data.Key.Name)
                         {
                             currVertex.MinPath = data.Value.MinPath;
-                            //currVertex.MinVertex = Int32.Parse(data.Value.MinVertex.Name);
-                            break;
+                            if (data.Value.MinVertex != null)
+                            {
+                                currVertex.MinVertex = data.Value.MinVertex.Name;
+                                break;
+                            }
                         }                     
                     }
                     
